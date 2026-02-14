@@ -2,7 +2,13 @@ export default {
   data() {
     return {
       tasks: [],
-      newTask: '',
+      showAddPanel: false,
+      newTask: {
+        title: '',
+        priority: 'medium',
+        dueDate: '',
+        reminderTime: ''
+      },
       userId: 'cmlmdy7xw0000la9lcy1p0pd6',
       apiBase: 'https://inf.alperagayev.com/api'
     };
@@ -17,9 +23,14 @@ export default {
     xhr.open('GET', `${this.apiBase}/tasks`);
     xhr.setRequestHeader('x-user-id', this.userId);
     xhr.onload = () => {
-      let response = JSON.parse(xhr.responseText);
-      if (response.code === 200) {
-        this.tasks = response.data || [];
+      try {
+        let response = JSON.parse(xhr.responseText);
+        if (response.code === 200) {
+          this.tasks = response.data || [];
+          this.checkOverdue();
+        }
+      } catch (e) {
+        console.error('Parse error:', e);
       }
     };
     xhr.onerror = () => {
@@ -28,12 +39,55 @@ export default {
     xhr.send();
   },
 
-  onNewTaskChange(event) {
-    this.newTask = event.value;
+  checkOverdue() {
+    let now = new Date();
+    for (let i = 0; i < this.tasks.length; i++) {
+      let task = this.tasks[i];
+      if (task.dueDate && !task.completed) {
+        let dueDate = new Date(task.dueDate);
+        task.isOverdue = dueDate < now;
+      } else {
+        task.isOverdue = false;
+      }
+    }
+  },
+
+  toggleAddPanel() {
+    this.showAddPanel = !this.showAddPanel;
+    if (this.showAddPanel) {
+      this.resetNewTask();
+    }
+  },
+
+  resetNewTask() {
+    this.newTask = {
+      title: '',
+      priority: 'medium',
+      dueDate: '',
+      reminderTime: ''
+    };
+  },
+
+  onTitleChange(event) {
+    this.newTask.title = event.value;
+  },
+
+  onDateChange(event) {
+    this.newTask.dueDate = event.value;
+  },
+
+  onTimeChange(event) {
+    this.newTask.reminderTime = event.value;
+  },
+
+  setPriority(priority) {
+    this.newTask.priority = priority;
   },
 
   addTask() {
-    if (!this.newTask || this.newTask.trim() === '') return;
+    if (!this.newTask.title || this.newTask.title.trim() === '') {
+      return;
+    }
 
     let xhr = new XMLHttpRequest();
     xhr.open('POST', `${this.apiBase}/tasks`);
@@ -41,16 +95,23 @@ export default {
     xhr.setRequestHeader('x-user-id', this.userId);
     
     let payload = {
-      title: this.newTask,
-      priority: 'medium',
-      dueDate: new Date().toISOString().split('T')[0]
+      title: this.newTask.title,
+      priority: this.newTask.priority,
+      dueDate: this.newTask.dueDate || null,
+      reminderTime: this.newTask.reminderTime || null
     };
 
     xhr.onload = () => {
-      let response = JSON.parse(xhr.responseText);
-      if (response.code === 201) {
-        this.tasks.push(response.data);
-        this.newTask = '';
+      try {
+        let response = JSON.parse(xhr.responseText);
+        if (response.code === 201) {
+          response.data.isOverdue = false;
+          this.tasks.push(response.data);
+          this.showAddPanel = false;
+          this.resetNewTask();
+        }
+      } catch (e) {
+        console.error('Parse error:', e);
       }
     };
     xhr.onerror = () => {
@@ -78,10 +139,15 @@ export default {
     let payload = { completed: newStatus };
 
     xhr.onload = () => {
-      let response = JSON.parse(xhr.responseText);
-      if (response.code === 200) {
-        task.completed = newStatus;
-        this.$forceUpdate();
+      try {
+        let response = JSON.parse(xhr.responseText);
+        if (response.code === 200) {
+          task.completed = newStatus;
+          task.isOverdue = false;
+          this.$forceUpdate();
+        }
+      } catch (e) {
+        console.error('Parse error:', e);
       }
     };
     xhr.onerror = () => {
@@ -96,15 +162,19 @@ export default {
     xhr.setRequestHeader('x-user-id', this.userId);
 
     xhr.onload = () => {
-      let response = JSON.parse(xhr.responseText);
-      if (response.code === 200) {
-        let filtered = [];
-        for (let i = 0; i < this.tasks.length; i++) {
-          if (this.tasks[i].id !== taskId) {
-            filtered.push(this.tasks[i]);
+      try {
+        let response = JSON.parse(xhr.responseText);
+        if (response.code === 200) {
+          let filtered = [];
+          for (let i = 0; i < this.tasks.length; i++) {
+            if (this.tasks[i].id !== taskId) {
+              filtered.push(this.tasks[i]);
+            }
           }
+          this.tasks = filtered;
         }
-        this.tasks = filtered;
+      } catch (e) {
+        console.error('Parse error:', e);
       }
     };
     xhr.onerror = () => {
