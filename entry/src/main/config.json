@@ -35,6 +35,11 @@
         ],
         "name": ".MainAbility"
       }
+    ],
+    "reqPermissions": [
+      {
+        "name": "ohos.permission.INTERNET"
+      }
     ]
   }
 }
