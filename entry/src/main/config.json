@@ -1,7 +1,7 @@
 {
   "app": {
-    "bundleName": "com.aga.reminder",
-    "vendor": "example",
+    "bundleName": "com.huawei.gt6checklist",
+    "vendor": "Agayev",
     "version": {
       "code": 1000000,
       "name": "1.0.0"

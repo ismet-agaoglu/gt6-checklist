@@ -1,5 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
 <div class="container">
-    <text class="title">
-        {{ $t('strings.hello') }} {{ title }}
-    </text>
+  <div class="header">
+    <text class="title">Yapılacaklar</text>
+  </div>
+  
+  <div class="task-input">
+    <input class="input-field" 
+           type="text" 
+           placeholder="Yeni görev..."
+           value="{{ newTask }}"
+           @change="onNewTaskChange">
+    </input>
+    <div class="add-btn" @click="addTask">
+      <text class="btn-text">+</text>
+    </div>
+  </div>
+
+  <list class="task-list" direction="column">
+    <list-item for="{{ tasks }}" class="task-item">
+      <div class="task-row">
+        <div class="checkbox" @click="toggleTask($item.id)">
+          <text class="check-mark" if="{{ $item.completed }}">✓</text>
+        </div>
+        <text class="task-text" style="color: {{ $item.completed ? '#6a7a8a' : '#ffffff' }};">{{ $item.title }}</text>
+        <div class="delete-btn" @click="deleteTask($item.id)">
+          <text class="del-text">×</text>
+        </div>
+      </div>
+    </list-item>
+  </list>
+
+  <div class="footer">
+    <text class="task-count">{{ tasks.length }} görev</text>
+  </div>
 </div>
