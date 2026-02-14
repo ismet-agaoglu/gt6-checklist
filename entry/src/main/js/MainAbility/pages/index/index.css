@@ -2,8 +2,6 @@
   width: 100%;
   height: 100%;
   background-color: #0a0e27;
-  padding: 0;
-  margin: 0;
 }
 
 .header {
@@ -69,7 +67,7 @@
 .section-label {
   font-size: 12px;
   color: #8a9aaa;
-  display: block;
+  display: flex;
   margin-bottom: 5px;
 }
 
@@ -80,26 +78,20 @@
 }
 
 .priority-btn {
-  flex: 1;
+  width: 33%;
+  height: 35px;
   background-color: #2a2f4a;
   color: #ffffff;
   display: flex;
   justify-content: center;
   align-items: center;
   font-size: 12px;
-  margin-right: 5px;
 }
 
-.priority-btn.active-low {
-  background-color: #44aa44;
-}
-
-.priority-btn.active-med {
-  background-color: #ffaa00;
-}
-
-.priority-btn.active-high {
-  background-color: #ff4444;
+.priority-value {
+  font-size: 11px;
+  color: #8a9aaa;
+  margin-top: 5px;
 }
 
 .date-section {
@@ -186,14 +178,9 @@
   width: 100%;
   background-color: #141829;
   display: flex;
-  align-items: flex-start;
+  align-items: center;
   padding: 8px;
   margin-bottom: 3px;
-}
-
-.task-row.overdue {
-  background-color: #2a1a1a;
-  border-left: 3px solid #ff4444;
 }
 
 .checkbox {
@@ -204,7 +191,6 @@
   justify-content: center;
   align-items: center;
   margin-right: 10px;
-  flex-shrink: 0;
 }
 
 .check-mark {
@@ -213,51 +199,25 @@
 }
 
 .task-info {
-  flex: 1;
+  width: 70%;
 }
 
 .task-text {
   font-size: 14px;
+  color: #ffffff;
   padding: 0px 5px;
 }
 
 .task-meta {
   width: 100%;
-  height: 20px;
   display: flex;
   margin-top: 3px;
-  gap: 5px;
 }
 
-.meta-badge {
+.meta-text {
   font-size: 10px;
-  padding: 2px 4px;
-  border-radius: 2px;
-}
-
-.meta-badge.high {
-  background-color: #ff4444;
-  color: #ffffff;
-}
-
-.meta-badge.medium {
-  background-color: #ffaa00;
-  color: #000000;
-}
-
-.meta-badge.low {
-  background-color: #44aa44;
-  color: #ffffff;
-}
-
-.meta-date {
-  font-size: 11px;
-  color: #6a9aaa;
-}
-
-.meta-time {
-  font-size: 11px;
-  color: #6a9aaa;
+  color: #8a9aaa;
+  margin-right: 5px;
 }
 
 .delete-btn {
@@ -267,7 +227,6 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  flex-shrink: 0;
 }
 
 .del-text {

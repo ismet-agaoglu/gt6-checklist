@@ -3,7 +3,7 @@
   <div class="header">
     <text class="title">Yapılacaklar</text>
   </div>
-  
+
   <div class="add-panel" if="{{ showAddPanel }}">
     <div class="panel-header">
       <text class="panel-title">Yeni Görev</text>
@@ -22,34 +22,34 @@
     <div class="priority-section">
       <text class="section-label">Öncelik</text>
       <div class="priority-buttons">
-        <div class="priority-btn {{ newTask.priority === 'low' ? 'active-low' : '' }}" 
-             @click="setPriority('low')">
+        <div class="priority-btn" @click="setPriority('low')">
           <text>Düşük</text>
         </div>
-        <div class="priority-btn {{ newTask.priority === 'medium' ? 'active-med' : '' }}" 
-             @click="setPriority('medium')">
+        <div class="priority-btn" @click="setPriority('medium')">
           <text>Orta</text>
         </div>
-        <div class="priority-btn {{ newTask.priority === 'high' ? 'active-high' : '' }}" 
-             @click="setPriority('high')">
+        <div class="priority-btn" @click="setPriority('high')">
           <text>Yüksek</text>
         </div>
       </div>
+      <text class="priority-value">Seçili: {{ newTask.priority }}</text>
     </div>
 
     <div class="date-section">
-      <text class="section-label">Tarih</text>
+      <text class="section-label">Tarih (YYYY-MM-DD)</text>
       <input class="date-input" 
-             type="date" 
+             type="text" 
+             placeholder="2026-02-15"
              value="{{ newTask.dueDate }}"
              @change="onDateChange">
       </input>
     </div>
 
     <div class="time-section">
-      <text class="section-label">Saat</text>
+      <text class="section-label">Saat (HH:MM)</text>
       <input class="time-input" 
-             type="time" 
+             type="text" 
+             placeholder="14:30"
              value="{{ newTask.reminderTime }}"
              @change="onTimeChange">
       </input>
@@ -68,18 +68,19 @@
     </div>
   </div>
 
-  <list class="task-list" direction="column">
+  <list class="task-list">
     <list-item for="{{ tasks }}" class="task-item">
-      <div class="task-row {{ $item.isOverdue ? 'overdue' : '' }}">
+      <div class="task-row">
         <div class="checkbox" @click="toggleTask($item.id)">
           <text class="check-mark" if="{{ $item.completed }}">✓</text>
         </div>
         <div class="task-info">
-          <text class="task-text" style="color: {{ $item.completed ? '#6a7a8a' : '#ffffff' }};">{{ $item.title }}</text>
+          <text class="task-text">{{ $item.title }}</text>
           <div class="task-meta">
-            <text class="meta-badge {{ $item.priority }}">{{ $item.priority }}</text>
-            <text class="meta-date" if="{{ $item.dueDate }}">📅 {{ $item.dueDate }}</text>
-            <text class="meta-time" if="{{ $item.reminderTime }}">🕐 {{ $item.reminderTime }}</text>
+            <text class="meta-text">{{ $item.priority }}</text>
+            <text class="meta-text" if="{{ $item.dueDate }}">{{ $item.dueDate }}</text>
+            <text class="meta-text" if="{{ $item.reminderTime }}">{{ $item.reminderTime }}</text>
+            <text class="meta-text" if="{{ $item.isOverdue }}">GECİKMİŞ</text>
           </div>
         </div>
         <div class="delete-btn" @click="deleteTask($item.id)">
