@@ -3,6 +3,7 @@
   <div class="header">
     <text class="title">Yapılacaklar</text>
   </div>
+  <text class="debug">Görev sayısı: {{ tasks.length }}</text>
 
   <div class="task-input" if="{{ !showAddPanel }}">
     <div class="add-btn-simple" @click="toggleAddPanel">
