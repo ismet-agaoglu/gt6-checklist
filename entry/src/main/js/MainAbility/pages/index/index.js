@@ -28,11 +28,11 @@ export default {
           else if (data && data.code === 200) this.tasks = data.data || [];
           this.$forceUpdate();
         } catch (e) {
-          console.error('parse error', e);
+          console.error('parse error: ' + e);
         }
       },
       fail: (err) => {
-        console.error('fetch fail', err);
+        console.error('fetch fail: ' + err);
       }
     });
   },
