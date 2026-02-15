@@ -2,7 +2,7 @@
 <div class="container">
   <div class="header">
     <text class="title">Yapılacaklar</text>
-    <text class="debug">TASKS: {{ tasks.length }}</text>
+    <text class="debug">{{ apiStatus }} | TASKS: {{ tasks.length }}</text>
   </div>
 
   <div class="task-input" if="{{ !showAddPanel }}">
