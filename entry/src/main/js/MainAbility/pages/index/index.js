@@ -3,16 +3,26 @@ import fetch from '@system.fetch';
 export default {
   data() {
     return {
-      showAddPanel: false,
       tasks: [],
       apiStatus: 'API: bekleniyor',
+      netStatus: 'NET: bekleniyor',
       userId: 'cmlmdy7xw0000la9lcy1p0pd6',
       apiBase: 'http://inf.alperagayev.com/api'
     };
   },
-  onInit() { this.loadTasks(); },
+  onInit() {
+    this.testNet();
+    this.loadTasks();
+  },
+  testNet() {
+    fetch.fetch({
+      url: 'http://example.com',
+      method: 'GET',
+      success: () => { this.netStatus = 'NET: OK'; this.$forceUpdate(); },
+      fail: () => { this.netStatus = 'NET: FAIL'; this.$forceUpdate(); }
+    });
+  },
   loadTasks() {
-    let timedOut = false;
     setTimeout(() => {
       if (this.apiStatus === 'API: bekleniyor') {
         this.apiStatus = 'API: TIMEOUT';
@@ -25,7 +35,6 @@ export default {
       method: 'GET',
       header: { 'x-user-id': this.userId },
       success: (res) => {
-        if (timedOut) return;
         try {
           let data = res.data;
           if (typeof data === 'string') data = JSON.parse(data);
@@ -37,11 +46,9 @@ export default {
           this.apiStatus = 'API: PARSE ERR';
         }
       },
-      fail: (err) => {
-        if (timedOut) return;
+      fail: () => {
         this.apiStatus = 'API: FAIL';
       }
     });
-  },
-  toggleAddPanel() { this.showAddPanel = !this.showAddPanel; }
+  }
 };
