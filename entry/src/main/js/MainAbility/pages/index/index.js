@@ -7,16 +7,25 @@ export default {
       tasks: [],
       apiStatus: 'API: bekleniyor',
       userId: 'cmlmdy7xw0000la9lcy1p0pd6',
-      apiBase: 'https://inf.alperagayev.com/api'
+      apiBase: 'http://inf.alperagayev.com/api'
     };
   },
   onInit() { this.loadTasks(); },
   loadTasks() {
+    let timedOut = false;
+    setTimeout(() => {
+      if (this.apiStatus === 'API: bekleniyor') {
+        this.apiStatus = 'API: TIMEOUT';
+        this.$forceUpdate();
+      }
+    }, 6000);
+
     fetch.fetch({
       url: `${this.apiBase}/tasks`,
       method: 'GET',
       header: { 'x-user-id': this.userId },
       success: (res) => {
+        if (timedOut) return;
         try {
           let data = res.data;
           if (typeof data === 'string') data = JSON.parse(data);
@@ -29,6 +38,7 @@ export default {
         }
       },
       fail: (err) => {
+        if (timedOut) return;
         this.apiStatus = 'API: FAIL';
       }
     });
